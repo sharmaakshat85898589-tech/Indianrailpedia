@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Indian Railpedia — a professional educational encyclopedia of Indian Railways locomotives, trainsets, history and railway technology.">
+  <title>Indian Railpedia | Indian Railways Encyclopedia</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+  const search = document.getElementById('search');
+  const cards = [...document.querySelectorAll('.fleet-card')];
+  const locoCards = [...document.querySelectorAll('.locomotive-item')];
+  const noResults = document.getElementById('noResults');
+  const locoNoResults = document.getElementById('locoNoResults');
+  let activeFilter = 'all';
+
+  function applySearch() {
+    const query = (search?.value || '').toLowerCase().trim();
+    let visibleAll = 0, visibleLoco = 0;
+
+    cards.forEach(card => {
+      const matchesSearch = (card.dataset.name || '').toLowerCase().includes(query);
+      const matchesFilter = !card.classList.contains('locomotive-item') ||
+        activeFilter === 'all' || card.dataset.category === activeFilter;
+      const show = matchesSearch && matchesFilter;
+      card.style.display = show ? '' : 'none';
+      if (show) visibleAll++;
+    });
+
+    locoCards.forEach(card => {
+      const matchesSearch = (card.dataset.name || '').toLowerCase().includes(query);
+      const matchesFilter = activeFilter === 'all' || card.dataset.category === activeFilter;
+      const show = matchesSearch && matchesFilter;
+      card.style.display = show ? '' : 'none';
+      if (show) visibleLoco++;
+    });
+
+    if (noResults) noResults.classList.toggle('hidden', visibleAll !== 0);
+    if (locoNoResults) locoNoResults.classList.toggle('hidden', visibleLoco !== 0);
+  }
+
+  if (search) search.addEventListener('input', applySearch);
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.filter;
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('active', 'bg-railOrange', 'border-railOrange');
+        b.classList.add('bg-white/5', 'border-white/10');
+      });
+      btn.classList.add('active', 'bg-railOrange', 'border-railOrange');
+      btn.classList.remove('bg-white/5', 'border-white/10');
+      applySearch();
+    });
+  });
+</script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background:
+      radial-gradient(circle at 15% 10%, rgba(255,90,31,.08), transparent 28%),
+      radial-gradient(circle at 85% 20%, rgba(30,100,180,.10), transparent 30%),
+      #070b12;
+    }
+    .glass { background: rgba(16,24,39,.72); backdrop-filter: blur(16px); }
+    .hero-grid {
+      background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size: 42px 42px;
+    }
+    .card { transition: transform .25s ease, border-color .25s ease, box-shadow .25s ease; }
+    .card:hover { transform: translateY(-7px); border-color: rgba(255,90,31,.45); box-shadow: 0 20px 50px rgba(0,0,0,.28); }
+    .rail-line { height: 2px; background: linear-gradient(90deg, transparent, #ff5a1f, transparent); }
+    .fade-up { animation: fadeUp .8s ease both; }
+    @keyframes fadeUp { from {opacity:0; transform:translateY(18px)} to {opacity:1; transform:translateY(0)} }
+  </style>
+</head>
+
+<body class="text-slate-200 antialiased selection:bg-railOrange selection:text-white">
+
+<header class="sticky top-0 z-50 glass border-b border-white/10">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-4 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-3">
+      <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-railOrange to-amber-400 flex items-center justify-center font-black text-white shadow-glow">IR</div>
+      <div>
+        <div class="text-lg md:text-xl font-black text-white">Indian<span class="text-railOrange">Railpedia</span></div>
+        <div class="text-[10px] uppercase tracking-[.25em] text-slate-500">Railway Encyclopedia</div>
+      </div>
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-8 text-sm text-slate-400">
+      <a href="#trains" class="hover:text-white transition">Trains</a>
+      <a href="#history" class="hover:text-white transition">History</a>
+      <a href="#fleets" class="hover:text-white transition">Fleet</a>
+      <a href="#technology" class="hover:text-white transition">Technology</a>
+      <a href="#founder" class="hover:text-white transition">Founder</a>
+    </nav>
+
+    <a href="#fleets" class="rounded-full bg-railOrange px-5 py-2.5 text-sm font-bold text-white hover:bg-orange-600 transition">
+      Explore Fleet
+    </a>
+  </div>
+</header>
+
+<main>
+  <section class="hero-grid relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 py-24 md:py-32 text-center">
+      <div class="fade-up inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-orange-300">
+        <span class="w-2 h-2 rounded-full bg-railOrange animate-pulse"></span>
+        The Complete Indian Railway Fleet Encyclopedia
+      </div>
+      <h1 class="fade-up mt-7 text-5xl md:text-7xl font-black tracking-tight text-white leading-[1.02]">
+        Indian Railways
+        <span class="block text-transparent bg-clip-text bg-gradient-to-r from-railOrange via-amber-400 to-white">Locomotives & Coaches</span>
+      </h1>
+      <p class="fade-up max-w-3xl mx-auto mt-7 text-base md:text-lg leading-8 text-slate-400">
+        Explore mainline locomotives, passenger coaches, trainsets, legacy traction and modern railway technologies in one professional educational archive.
+      </p>
+      <div class="fade-up mt-10 flex flex-col sm:flex-row justify-center gap-4">
+        <a href="#locomotives" class="rounded-xl bg-railOrange px-7 py-4 font-bold text-white hover:bg-orange-600 transition shadow-glow">Explore Locomotives</a>
+        <a href="#coaches" class="rounded-xl border border-white/10 bg-white/5 px-7 py-4 font-bold text-slate-200 hover:bg-white/10 transition">Explore Coaches</a>
+      </div>
+      <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-3 max-w-5xl mx-auto">
+        <div class="glass rounded-2xl border border-white/10 p-5"><div class="text-2xl font-black text-white">WAP</div><div class="text-xs text-slate-500 mt-1">Passenger electric</div></div>
+        <div class="glass rounded-2xl border border-white/10 p-5"><div class="text-2xl font-black text-white">WAG</div><div class="text-xs text-slate-500 mt-1">Freight electric</div></div>
+        <div class="glass rounded-2xl border border-white/10 p-5"><div class="text-2xl font-black text-white">WDM / WDG</div><div class="text-xs text-slate-500 mt-1">Diesel families</div></div>
+        <div class="glass rounded-2xl border border-white/10 p-5"><div class="text-2xl font-black text-white">LHB / ICF</div><div class="text-xs text-slate-500 mt-1">Coach technologies</div></div>
+      </div>
+    </div>
+  </section>
+
+  
+<section id="trains" class="max-w-7xl mx-auto px-5 md:px-8 py-24">
+  <div class="mb-12">
+    <p class="text-xs font-bold uppercase tracking-[.25em] text-railOrange">Complete Train Directory</p>
+    <h2 class="text-4xl md:text-5xl font-black text-white mt-2">Indian Railway Trains</h2>
+    <p class="text-slate-400 mt-3 max-w-3xl">Explore major train and trainset families with their role, traction, typical speed capability and technical identity.</p>
+  </div>
+
+  <div class="relative mb-8">
+    <input id="trainSearch" type="search" placeholder="Search train, trainset or service..."
+      class="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-sm text-white outline-none focus:border-railOrange">
+  </div>
+
+  <div id="trainGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+    <article class="train-card rounded-2xl border border-white/10 bg-railCard overflow-hidden" data-name="Vande Bharat Express Train 18">
+      <div class="h-44 bg-gradient-to-br from-railBlue to-slate-950 flex items-center justify-center text-7xl">🚄</div>
+      <div class="p-6">
+        <span class="text-xs font-bold text-sky-300">SEMI-HIGH-SPEED ELECTRIC TRAINSET</span>
+        <h3 class="text-2xl font-black text-white mt-3">Vande Bharat Express</h3>
+        <p class="text-sm text-slate-400 mt-3 leading-6">Modern self-propelled intercity trainset with distributed traction and air-conditioned passenger accommodation.</p>
+        <div class="rail-line my-5"></div>
+        <dl class="grid grid-cols-2 gap-y-3 text-xs">
+          <div><dt class="text-slate-500">Designed capability</dt><dd class="font-bold text-white mt-1">Up to 180 km/h</dd></div>
+          <div><dt class="text-slate-500">Traction</dt><dd class="font-bold text-white mt-1">25 kV AC</dd></div>
+          <div><dt class="text-slate-500">Formation</dt><dd class="font-bold text-white mt-1">Multiple trainset configurations</dd></div>
+          <div><dt class="text-slate-500">Role</dt><dd class="font-bold text-white mt-1">Intercity passenger</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="train-card rounded-2xl border border-white/10 bg-railCard overflow-hidden" data-name="Rajdhani Express">
+      <div class="h-44 bg-gradient-to-br from-red-950 to-slate-950 flex items-center justify-center text-7xl">🚆</div>
+      <div class="p-6">
+        <span class="text-xs font-bold text-amber-300">PREMIUM EXPRESS</span>
+        <h3 class="text-2xl font-black text-white mt-3">Rajdhani Express</h3>
+        <p class="text-sm text-slate-400 mt-3 leading-6">Long-distance premium service family connecting New Delhi with major cities, generally operated with electric locomotives and modern coaches.</p>
+        <div class="rail-line my-5"></div>
+        <dl class="grid grid-cols-2 gap-y-3 text-xs">
+          <div><dt class="text-slate-500">Service type</dt><dd class="font-bold text-white mt-1">Superfast express</dd></div>
+          <div><dt class="text-slate-500">Traction</dt><dd class="font-bold text-white mt-1">Electric on electrified routes</dd></div>
+          <div><dt class="text-slate-500">Coaches</dt><dd class="font-bold text-white mt-1">Primarily AC</dd></div>
+          <div><dt class="text-slate-500">Typical role</dt><dd class="font-bold text-white mt-1">Long distance</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="train-card rounded-2xl border border-white/10 bg-railCard overflow-hidden" data-name="Shatabdi Express">
+      <div class="h-44 bg-gradient-to-br from-blue-950 to-slate-950 flex items-center justify-center text-7xl">🚄</div>
+      <div class="p-6">
+        <span class="text-xs font-bold text-cyan-300">DAY INTERCITY EXPRESS</span>
+        <h3 class="text-2xl font-black text-white mt-3">Shatabdi Express</h3>
+        <p class="text-sm text-slate-400 mt-3 leading-6">Fast daytime intercity services focused on seated passenger travel, commonly using AC Chair Car and Executive Class accommodation.</p>
+        <div class="rail-line my-5"></div>
+        <dl class="grid grid-cols-2 gap-y-3 text-xs">
+          <div><dt class="text-slate-500">Service type</dt><dd class="font-bold text-white mt-1">Superfast intercity</dd></div>
+          <div><dt class="text-slate-500">Accommodation</dt><dd class="font-bold text-white mt-1">CC / EC</dd></div>
+          <div><dt class="text-slate-500">Traction</dt><dd class="font-bold text-white mt-1">Electric on electrified routes</dd></div>
+          <div><dt class="text-slate-500">Role</dt><dd class="font-bold text-white mt-1">Day travel</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="train-card rounded-2xl border border-white/10 bg-railCard overflow-hidden" data-name="Duronto Express">
+      <div class="h-44 bg-gradient-to-br from-emerald-950 to-slate-950 flex items-center justify-center text-7xl">🚆</div>
+      <div class="p-6">
+        <span class="text-xs font-bold text-emerald-300">LONG-DISTANCE EXPRESS</span>
+        <h3 class="text-2xl font-black text-white mt-3">Duronto Express</h3>
+        <p class="text-sm text-slate-400 mt-3 leading-6">Long-distance service family introduced for fast point-to-point travel, with several routes operating with modern electric traction and coaches.</p>
+        <div class="rail-line my-5"></div>
+        <dl class="grid grid-cols-2 gap-y-3 text-xs">
+          <div><dt class="text-slate-500">Service</dt><dd class="font-bold text-white mt-1">Long distance</dd></div>
+          <div><dt class="text-slate-500">Traction</dt><dd class="font-bold text-white mt-1">Electric on electrified routes</dd></div>
+          <div><dt class="text-slate-500">Coach family</dt><dd class="font-bold text-white mt-1">Modern LHB / compatible stock</dd></div>
+          <div><dt class="text-slate-500">Role</dt><dd class="font-bold text-white mt-1">Intercity</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="train-card rounded-2xl border border-white/10 bg-railCard overflow-hidden" data-name="Tejas Express">
+      <div class="h-44 bg-gradient-to-br from-orange-950 to-slate-950 flex items-center justify-center text-7xl">🚄</div>
+      <div class="p-6">
+        <span class="text-xs font-bold text-orange-300">PREMIUM INTERCITY</span>
+        <h3 class="text-2xl font-black text-white mt-3">Tejas Express</h3>
+        <p class="text-sm text-slate-400 mt-3 leading-6">Premium intercity service family using modern passenger coaches and onboard amenities, with electric traction on electrified routes.</p>
+        <div class="rail-line my-5"></div>
+        <dl class="grid grid-cols-2 gap-y-3 text-xs">
+          <div><dt class="text-slate-500">Service</dt><dd class="font-bold text-white mt-1">Premium express</dd></div>
+          <div><dt class="text-slate-500">Traction</dt><dd class="font-bold text-white mt-1">Electric on electrified routes</dd></div>
+          <div><dt class="text-slate-500">Coaches</dt><dd class="font-bold text-white mt-1">Modern passenger stock</dd></div>
+          <div><dt class="text-slate-500">Role</dt><dd class="font-bold text-white mt-1">Intercity</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="train-card rounded-2xl border border-white/10 bg-railCard overflow-hidden" data-name="MEMU Mainline Electric Multiple Unit">
+      <div class="h-44 bg-gradient-to-br from-violet-950 to-slate-950 flex items-center justify-center text-7xl">🚉</div>
+      <div class="p-6">
+        <span class="text-xs font-bold text-violet-300">MULTIPLE UNIT</span>
+        <h3 class="text-2xl font-black text-white mt-3">MEMU</h3>
+        <p class="text-sm text-slate-400 mt-3 leading-6">Mainline Electric Multiple Unit trains designed for frequent regional and suburban-style services, with powered vehicles distributed through the formation.</p>
+        <div class="rail-line my-5"></div>
+        <dl class="grid grid-cols-2 gap-y-3 text-xs">
+          <div><dt class="text-slate-500">Full name</dt><dd class="font-bold text-white mt-1">Mainline EMU</dd></div>
+          <div><dt class="text-slate-500">Traction</dt><dd class="font-bold text-white mt-1">Electric</dd></div>
+          <div><dt class="text-slate-500">Role</dt><dd class="font-bold text-white mt-1">Regional</dd></div>
+          <div><dt class="text-slate-500">Formation</dt><dd class="font-bold text-white mt-1">Multiple unit</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="train-card rounded-2xl border border-white/10 bg-railCard overflow-hidden" data-name="DEMU Diesel Electric Multiple Unit">
+      <div class="h-44 bg-gradient-to-br from-amber-950 to-slate-950 flex items-center justify-center text-7xl">🚉</div>
+      <div class="p-6">
+        <span class="text-xs font-bold text-amber-300">MULTIPLE UNIT</span>
+        <h3 class="text-2xl font-black text-white mt-3">DEMU</h3>
+        <p class="text-sm text-slate-400 mt-3 leading-6">Diesel Electric Multiple Unit train family for regional services, particularly useful where conventional electric traction is unavailable.</p>
+        <div class="rail-line my-5"></div>
+        <dl class="grid grid-cols-2 gap-y-3 text-xs">
+          <div><dt class="text-slate-500">Full name</dt><dd class="font-bold text-white mt-1">Diesel Electric MU</dd></div>
+          <div><dt class="text-slate-500">Traction</dt><dd class="font-bold text-white mt-1">Diesel-electric</dd></div>
+          <div><dt class="text-slate-500">Role</dt><dd class="font-bold text-white mt-1">Regional</dd></div>
+          <div><dt class="text-slate-500">Formation</dt><dd class="font-bold text-white mt-1">Multiple unit</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="train-card rounded-2xl border border-white/10 bg-railCard overflow-hidden" data-name="EMU Electric Multiple Unit local train">
+      <div class="h-44 bg-gradient-to-br from-cyan-950 to-slate-950 flex items-center justify-center text-7xl">🚉</div>
+      <div class="p-6">
+        <span class="text-xs font-bold text-cyan-300">SUBURBAN / LOCAL</span>
+        <h3 class="text-2xl font-black text-white mt-3">EMU Local</h3>
+        <p class="text-sm text-slate-400 mt-3 leading-6">Electric Multiple Unit trains used for high-frequency suburban and local passenger services, with rapid acceleration and frequent station stops.</p>
+        <div class="rail-line my-5"></div>
+        <dl class="grid grid-cols-2 gap-y-3 text-xs">
+          <div><dt class="text-slate-500">Full name</dt><dd class="font-bold text-white mt-1">Electric Multiple Unit</dd></div>
+          <div><dt class="text-slate-500">Traction</dt><dd class="font-bold text-white mt-1">Electric</dd></div>
+          <div><dt class="text-slate-500">Role</dt><dd class="font-bold text-white mt-1">Suburban</dd></div>
+          <div><dt class="text-slate-500">Strength</dt><dd class="font-bold text-white mt-1">Fast acceleration</dd></div>
+        </dl>
+      </div>
+    </article>
+  </div>
+  <div id="trainNoResults" class="hidden text-center py-12 text-slate-500">No train matches your search.</div>
+</section>
+
+<section id="locomotives" class="max-w-7xl mx-auto px-5 md:px-8 py-24">
+    <div class="mb-12">
+      <p class="text-xs font-bold uppercase tracking-[.25em] text-railOrange">01 · Locomotive Encyclopedia</p>
+      <h2 class="text-4xl md:text-5xl font-black text-white mt-2">Mainline Locomotives</h2>
+      <p class="text-slate-400 mt-3 max-w-3xl">Browse the major technical families of Indian Railways traction, from legacy DC machines to modern high-power AC electric and diesel locomotives.</p>
+    </div>
+
+    <div class="flex flex-wrap gap-3 mb-8">
+      <button class="filter-btn active rounded-full border border-railOrange bg-railOrange px-4 py-2 text-xs font-bold" data-filter="all">All</button>
+      <button class="filter-btn rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold" data-filter="electric">AC Electric</button>
+      <button class="filter-btn rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold" data-filter="diesel">Diesel</button>
+      <button class="filter-btn rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold" data-filter="legacy">DC / Dual Voltage</button>
+    </div>
+
+    <div id="locomotiveGrid" class="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+
+      <article class="fleet-card locomotive-item rounded-2xl border border-white/10 bg-railCard p-6" data-category="electric" data-name="WAP-1 WAP-3 WAP-4 WAP-5 WAP-6 WAP-7 passenger">
+        <div class="flex justify-between items-start"><span class="text-xs font-bold text-sky-300 bg-sky-400/10 px-3 py-1.5 rounded-full">WAP · PASSENGER</span><span class="text-slate-500">⚡</span></div>
+        <h3 class="text-2xl font-black text-white mt-5">WAP Series</h3>
+        <p class="text-slate-400 text-sm leading-6 mt-3">AC electric passenger locomotive family covering WAP-1, WAP-3, WAP-4, WAP-5, WAP-6 and WAP-7. The family spans conventional passenger traction through modern high-power express service.</p>
+        <div class="rail-line my-5"></div>
+        <p class="text-xs text-slate-500">Classes</p><p class="text-sm font-bold text-slate-200 mt-1">WAP-1 · WAP-3 · WAP-4 · WAP-5 · WAP-6 · WAP-7</p>
+      </article>
+
+      <article class="fleet-card locomotive-item rounded-2xl border border-white/10 bg-railCard p-6" data-category="electric" data-name="WAG-1 WAG-2 WAG-3 WAG-4 WAG-5 WAG-6 WAG-7 WAG-9 WAG-10 WAG-11 WAG-12 freight">
+        <div class="flex justify-between items-start"><span class="text-xs font-bold text-purple-300 bg-purple-400/10 px-3 py-1.5 rounded-full">WAG · FREIGHT</span><span class="text-slate-500">⚡</span></div>
+        <h3 class="text-2xl font-black text-white mt-5">WAG Series</h3>
+        <p class="text-slate-400 text-sm leading-6 mt-3">The principal AC electric freight family, including WAG-1 through WAG-12 and important variants. Modern examples are designed for increasingly heavy freight loads.</p>
+        <div class="rail-line my-5"></div>
+        <p class="text-xs text-slate-500">Key variants</p><p class="text-sm font-bold text-slate-200 mt-1">WAG-5 A/B/C/D/E/H/P · WAG-6 A/B/C · WAG-9 H/i/HC · WAG-12 A/B</p>
+      </article>
+
+      <article class="fleet-card locomotive-item rounded-2xl border border-white/10 bg-railCard p-6" data-category="diesel" data-name="WDM-1 WDM-2 WDM-3A WDM-3B WDM-3C WDM-3D WDM-3E WDM-3F WDM-4 WDM-6 WDM-7">
+        <div class="flex justify-between items-start"><span class="text-xs font-bold text-amber-300 bg-amber-400/10 px-3 py-1.5 rounded-full">WDM · MIXED TRAFFIC</span><span class="text-slate-500">🛢️</span></div>
+        <h3 class="text-2xl font-black text-white mt-5">WDM Series</h3>
+        <p class="text-slate-400 text-sm leading-6 mt-3">Mixed-traffic diesel locomotives used for both passenger and freight duties. The family includes the WDM-2 lineage and later WDM-3A/3B/3C/3D/3E/3F developments.</p>
+        <div class="rail-line my-5"></div>
+        <p class="text-xs text-slate-500">Classes</p><p class="text-sm font-bold text-slate-200 mt-1">WDM-1 · WDM-2 A/B/C · WDM-3 family · WDM-4 · WDM-6 · WDM-7</p>
+      </article>
+
+      <article class="fleet-card locomotive-item rounded-2xl border border-white/10 bg-railCard p-6" data-category="diesel" data-name="WDP-1 WDP-2 WDP-3A WDP-4 WDP-4B WDP-4D passenger">
+        <div class="flex justify-between items-start"><span class="text-xs font-bold text-orange-300 bg-orange-400/10 px-3 py-1.5 rounded-full">WDP · PASSENGER</span><span class="text-slate-500">🛢️</span></div>
+        <h3 class="text-2xl font-black text-white mt-5">WDP Series</h3>
+        <p class="text-slate-400 text-sm leading-6 mt-3">Passenger-dedicated diesel locomotives, progressing from WDP-1 and WDP-2 to the WDP-3A and later EMD-derived WDP-4, WDP-4B and dual-cab WDP-4D.</p>
+        <div class="rail-line my-5"></div>
+        <p class="text-xs text-slate-500">Classes</p><p class="text-sm font-bold text-slate-200 mt-1">WDP-1 · WDP-2/3A · WDP-4 · WDP-4B · WDP-4D</p>
+      </article>
+
+      <article class="fleet-card locomotive-item rounded-2xl border border-white/10 bg-railCard p-6" data-category="diesel" data-name="WDG-2 WDG-3A WDG-3B WDG-3C WDG-3D WDG-4 WDG-4D WDG-4G WDG-6G freight">
+        <div class="flex justify-between items-start"><span class="text-xs font-bold text-red-300 bg-red-400/10 px-3 py-1.5 rounded-full">WDG · FREIGHT</span><span class="text-slate-500">🛢️</span></div>
+        <h3 class="text-2xl font-black text-white mt-5">WDG Series</h3>
+        <p class="text-slate-400 text-sm leading-6 mt-3">Freight-focused diesel locomotives developed for heavy haulage. The family includes the WDG-3A lineage and high-power WDG-4 derivatives.</p>
+        <div class="rail-line my-5"></div>
+        <p class="text-xs text-slate-500">Classes</p><p class="text-sm font-bold text-slate-200 mt-1">WDG-2/3A · WDG-3B/C/D · WDG-4/4D/4G · WDG-6G</p>
+      </article>
+
+      <article class="fleet-card locomotive-item rounded-2xl border border-white/10 bg-railCard p-6" data-category="legacy" data-name="WCM-1 WCM-2 WCM-3 WCM-4 WCM-5 WCM-6 WCG-1 WCG-2 DC">
+        <div class="flex justify-between items-start"><span class="text-xs font-bold text-cyan-300 bg-cyan-400/10 px-3 py-1.5 rounded-full">WCM / WCG · LEGACY DC</span><span class="text-slate-500">🔌</span></div>
+        <h3 class="text-2xl font-black text-white mt-5">Pure DC Fleet</h3>
+        <p class="text-slate-400 text-sm leading-6 mt-3">Legacy direct-current electric locomotives including WCM and WCG classes. These historically important machines operated on earlier DC electrified sections and have largely been phased out.</p>
+        <div class="rail-line my-5"></div>
+        <p class="text-xs text-slate-500">Classes</p><p class="text-sm font-bold text-slate-200 mt-1">WCM-1/2/3/4/5/6 · WCG-1/2</p>
+      </article>
+
+      <article class="fleet-card locomotive-item rounded-2xl border border-white/10 bg-railCard p-6" data-category="legacy" data-name="WCAM-1 WCAM-2 WCAM-3 WCAG-1 AC DC dual voltage">
+        <div class="flex justify-between items-start"><span class="text-xs font-bold text-indigo-300 bg-indigo-400/10 px-3 py-1.5 rounded-full">WCAM / WCAG · DUAL VOLTAGE</span><span class="text-slate-500">⚡</span></div>
+        <h3 class="text-2xl font-black text-white mt-5">AC/DC Locomotives</h3>
+        <p class="text-slate-400 text-sm leading-6 mt-3">Dual-voltage electric locomotives developed for routes transitioning between DC and AC electrification, including WCAM-1/2/3 and WCAG-1.</p>
+        <div class="rail-line my-5"></div>
+        <p class="text-xs text-slate-500">Classes</p><p class="text-sm font-bold text-slate-200 mt-1">WCAM-1 · WCAM-2 · WCAM-3 · WCAG-1</p>
+      </article>
+
+      <article class="fleet-card locomotive-item rounded-2xl border border-white/10 bg-railCard p-6" data-category="electric" data-name="WAG-12B heavy freight 12000 hp">
+        <div class="flex justify-between items-start"><span class="text-xs font-bold text-purple-300 bg-purple-400/10 px-3 py-1.5 rounded-full">FLAGSHIP FREIGHT</span><span class="text-slate-500">🚆</span></div>
+        <h3 class="text-2xl font-black text-white mt-5">WAG-12B</h3>
+        <p class="text-slate-400 text-sm leading-6 mt-3">A twin-section high-power AC electric freight locomotive developed for heavy-haul operations, especially associated with Dedicated Freight Corridor traffic.</p>
+        <div class="rail-line my-5"></div>
+        <div class="grid grid-cols-2 gap-3 text-xs"><div><span class="text-slate-500">Power</span><strong class="block text-slate-200 mt-1">12,000 HP</strong></div><div><span class="text-slate-500">Traction</span><strong class="block text-slate-200 mt-1">25 kV AC</strong></div></div>
+      </article>
+
+      <article class="fleet-card locomotive-item rounded-2xl border border-white/10 bg-railCard p-6" data-category="electric" data-name="WAP-7 passenger 6350 HP">
+        <div class="flex justify-between items-start"><span class="text-xs font-bold text-sky-300 bg-sky-400/10 px-3 py-1.5 rounded-full">FLAGSHIP PASSENGER</span><span class="text-slate-500">🚄</span></div>
+        <h3 class="text-2xl font-black text-white mt-5">WAP-7</h3>
+        <p class="text-slate-400 text-sm leading-6 mt-3">A high-power AC passenger locomotive widely used for express services. It represents the transition toward fast, efficient electric mainline passenger traction.</p>
+        <div class="rail-line my-5"></div>
+        <div class="grid grid-cols-2 gap-3 text-xs"><div><span class="text-slate-500">Power</span><strong class="block text-slate-200 mt-1">6,350 HP</strong></div><div><span class="text-slate-500">Typical max</span><strong class="block text-slate-200 mt-1">140 km/h</strong></div></div>
+      </article>
+    </div>
+    <div id="locoNoResults" class="hidden text-center py-12 text-slate-500">No locomotive family matches your search.</div>
+  </section>
+
+  <section id="coaches" class="border-y border-white/10 bg-white/[.02]">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 py-24">
+      <div class="mb-12">
+        <p class="text-xs font-bold uppercase tracking-[.25em] text-railOrange">02 · Passenger Rolling Stock</p>
+        <h2 class="text-4xl md:text-5xl font-black text-white mt-2">Indian Railway Passenger Coaches</h2>
+        <p class="text-slate-400 mt-3 max-w-3xl">A structured directory of mainstream coach classes, structural technologies, power cars and modern self-propelled trainsets.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6">
+          <span class="text-xs font-bold text-slate-300 bg-white/5 px-3 py-1.5 rounded-full">GENERAL / UNRESERVED</span>
+          <h3 class="text-xl font-black text-white mt-4">UR · GS · Deen Dayalu · Antyodaya</h3>
+          <p class="text-sm text-slate-400 leading-6 mt-3">High-capacity non-AC passenger accommodation used for general travel, including newer coach concepts intended to improve passenger amenities.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6">
+          <span class="text-xs font-bold text-amber-300 bg-amber-400/10 px-3 py-1.5 rounded-full">SLEEPER</span>
+          <h3 class="text-xl font-black text-white mt-4">SL · S</h3>
+          <p class="text-sm text-slate-400 leading-6 mt-3">Sleeper accommodation for long-distance services, with non-AC sleeping berths and multiple passenger bays.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6">
+          <span class="text-xs font-bold text-sky-300 bg-sky-400/10 px-3 py-1.5 rounded-full">CHAIR CAR</span>
+          <h3 class="text-xl font-black text-white mt-4">CC · EC · EV</h3>
+          <p class="text-sm text-slate-400 leading-6 mt-3">Air-conditioned seated accommodation, including AC Chair Car, Executive Class / Anubhuti and Vistadome-style panoramic coaches.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6">
+          <span class="text-xs font-bold text-indigo-300 bg-indigo-400/10 px-3 py-1.5 rounded-full">AC SLEEPER</span>
+          <h3 class="text-xl font-black text-white mt-4">3E · 3A · 2A · 1A</h3>
+          <p class="text-sm text-slate-400 leading-6 mt-3">The principal AC overnight accommodation hierarchy, from 3-Tier Economy and 3-Tier to 2-Tier and First AC.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6">
+          <span class="text-xs font-bold text-orange-300 bg-orange-400/10 px-3 py-1.5 rounded-full">UTILITY & POWER</span>
+          <h3 class="text-xl font-black text-white mt-4">SLR · EOG · HOG · PC</h3>
+          <p class="text-sm text-slate-400 leading-6 mt-3">Operational coaches and systems supporting luggage, seating, electrical supply and onboard catering. HOG enables power from the electric locomotive instead of conventional generator cars on compatible rakes.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6">
+          <span class="text-xs font-bold text-emerald-300 bg-emerald-400/10 px-3 py-1.5 rounded-full">ICF / IRS</span>
+          <h3 class="text-xl font-black text-white mt-4">Legacy Steel Coach Era</h3>
+          <p class="text-sm text-slate-400 leading-6 mt-3">Indian Railway Standard and Integral Coach Factory designs form an important part of the historical development of conventional Indian passenger coaches.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6">
+          <span class="text-xs font-bold text-cyan-300 bg-cyan-400/10 px-3 py-1.5 rounded-full">LHB FAMILY</span>
+          <h3 class="text-xl font-black text-white mt-4">LHB · Hybrid LHB</h3>
+          <p class="text-sm text-slate-400 leading-6 mt-3">Modern stainless-steel coach architecture derived from the Linke-Hofmann-Busch design, introduced to improve ride quality, safety and high-speed capability.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6">
+          <span class="text-xs font-bold text-violet-300 bg-violet-400/10 px-3 py-1.5 rounded-full">DOUBLE DECKER</span>
+          <h3 class="text-xl font-black text-white mt-4">AC Double Decker · UDAY</h3>
+          <p class="text-sm text-slate-400 leading-6 mt-3">Two-level passenger coach concepts designed to increase seated capacity on suitable intercity routes.</p>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6">
+          <span class="text-xs font-bold text-rose-300 bg-rose-400/10 px-3 py-1.5 rounded-full">DISTRIBUTED POWER</span>
+          <h3 class="text-xl font-black text-white mt-4">Vande Bharat Family</h3>
+          <p class="text-sm text-slate-400 leading-6 mt-3">Modern self-propelled trainsets including 16-coach and shorter configurations, with newer sleeper and metro-oriented concepts forming part of the wider trainset evolution.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="technology" class="max-w-7xl mx-auto px-5 md:px-8 py-24">
+    <div class="rounded-3xl border border-white/10 bg-gradient-to-br from-railCard to-slate-950 p-8 md:p-12 overflow-hidden relative">
+      <div class="absolute -right-20 -top-20 w-72 h-72 rounded-full bg-railOrange/10 blur-3xl"></div>
+      <p class="text-xs font-bold uppercase tracking-[.25em] text-emerald-400">03 · Railway Technology</p>
+      <h2 class="text-4xl font-black text-white mt-3">Modern & Future Rail Systems</h2>
+      <p class="max-w-3xl text-slate-400 mt-4 leading-7">Indian Railways combines electrification, distributed-power trainsets, modern coach architecture, heavy-haul freight systems and research into cleaner propulsion.</p>
+      <div class="grid md:grid-cols-4 gap-4 mt-9">
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5"><div class="text-2xl">⚡</div><h3 class="font-bold text-white mt-3">25 kV AC</h3><p class="text-xs text-slate-400 mt-2">The dominant modern mainline electric traction system.</p></div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5"><div class="text-2xl">🚄</div><h3 class="font-bold text-white mt-3">Trainsets</h3><p class="text-xs text-slate-400 mt-2">Distributed traction puts powered equipment throughout the train.</p></div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5"><div class="text-2xl">📦</div><h3 class="font-bold text-white mt-3">DFC Freight</h3><p class="text-xs text-slate-400 mt-2">Dedicated freight infrastructure supports heavier and longer freight operations.</p></div>
+        <div class="rounded-2xl bg-white/5 border border-white/10 p-5"><div class="text-2xl">🌱</div><h3 class="font-bold text-white mt-3">Hydrogen</h3><p class="text-xs text-slate-400 mt-2">Hydrogen rail technology is being explored for selected applications.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="history" class="border-y border-white/10 bg-white/[.02]">
+    <div class="max-w-7xl mx-auto px-5 md:px-8 py-24">
+      <p class="text-xs font-bold uppercase tracking-[.25em] text-railOrange">04 · Evolution</p>
+      <h2 class="text-4xl font-black text-white mt-2">The Traction Journey</h2>
+      <div class="grid md:grid-cols-4 gap-5 mt-10">
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6"><b class="text-railOrange">01</b><h3 class="text-lg font-bold text-white mt-4">Steam</h3><p class="text-sm text-slate-400 mt-2">The foundation of India's early railway expansion.</p></div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6"><b class="text-railOrange">02</b><h3 class="text-lg font-bold text-white mt-4">Diesel</h3><p class="text-sm text-slate-400 mt-2">Flexible traction that became central to non-electrified routes.</p></div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6"><b class="text-railOrange">03</b><h3 class="text-lg font-bold text-white mt-4">Electric</h3><p class="text-sm text-slate-400 mt-2">AC electrification enabled efficient large-scale mainline operations.</p></div>
+        <div class="rounded-2xl border border-white/10 bg-railCard p-6"><b class="text-railOrange">04</b><h3 class="text-lg font-bold text-white mt-4">Future</h3><p class="text-sm text-slate-400 mt-2">High-power freight, trainsets, digital systems and cleaner propulsion.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="founder" class="max-w-5xl mx-auto px-5 md:px-8 py-24">
+    <div class="rounded-3xl border border-white/10 bg-railCard p-8 md:p-12 flex flex-col md:flex-row items-center gap-8">
+      <div class="w-28 h-28 rounded-3xl bg-gradient-to-br from-railOrange to-amber-400 flex items-center justify-center text-4xl font-black text-white shadow-glow">AS</div>
+      <div class="text-center md:text-left">
+        <p class="text-xs font-bold uppercase tracking-[.2em] text-railOrange">Founded & Curated By</p>
+        <h2 class="text-3xl font-black text-white mt-2">Akshat Sharma</h2>
+        <p class="text-slate-400 mt-3 leading-7">Indian Railpedia is founded and curated by Akshat Sharma in Rudrapur, Uttarakhand, as an educational digital archive dedicated to Indian railway locomotives, passenger coaches, technical classifications and railway innovation.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="border-t border-white/10 py-10 text-center px-5">
+  <div class="text-sm font-bold text-white">Indian<span class="text-railOrange">Railpedia</span></div>
+  <p class="text-xs text-slate-500 mt-2">Founded by Akshat Sharma · Educational railway archive · © 2026</p>
+</footer>
+
+<script>
+  const search = document.getElementById('search');
+  const cards = [...document.querySelectorAll('.fleet-card')];
+  const noResults = document.getElementById('noResults');
+
+  search.addEventListener('input', () => {
+    const query = search.value.toLowerCase().trim();
+    let visible = 0;
+
+    cards.forEach(card => {
+      const match = card.dataset.name.toLowerCase().includes(query);
+      card.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+
+    noResults.classList.toggle('hidden', visible !== 0);
+  });
+</script>
+
+
+<script>
+  const trainSearch = document.getElementById('trainSearch');
+  const trainCards = [...document.querySelectorAll('.train-card')];
+  const trainNoResults = document.getElementById('trainNoResults');
+
+  if (trainSearch) {
+    trainSearch.addEventListener('input', () => {
+      const q = trainSearch.value.toLowerCase().trim();
+      let shown = 0;
+      trainCards.forEach(card => {
+        const match = card.dataset.name.toLowerCase().includes(q);
+        card.style.display = match ? '' : 'none';
+        if (match) shown++;
+      });
+      trainNoResults.classList.toggle('hidden', shown !== 0);
+    });
+  }
+</script>
+
+</body>
+</html>
